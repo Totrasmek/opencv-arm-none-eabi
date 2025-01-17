@@ -59,7 +59,11 @@
 #include <functional>
 
 #if !defined(_M_CEE)
+#if defined(FREERTOS)
+#include "custom_mutex.hpp"
+#else
 #include <mutex>  // std::mutex, std::lock_guard
+#endif
 #endif
 
 namespace cv

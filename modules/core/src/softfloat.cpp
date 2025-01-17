@@ -3534,9 +3534,9 @@ static const uint64_t expTab[] = {
 };
 
 // 1 / ln(2) * (1 << EXPTAB_SCALE) == 1.4426950408889634073599246810019 * (1 << EXPTAB_SCALE)
-static const float64_t exp_prescale = float64_t::fromRaw(0x3ff71547652b82fe) * float64_t(1 << EXPTAB_SCALE);
-static const float64_t exp_postscale = float64_t::one()/float64_t(1 << EXPTAB_SCALE);
-static const float64_t exp_max_val(3000*(1 << EXPTAB_SCALE)); // log10(DBL_MAX) < 3000
+static const float64_t exp_prescale = float64_t::fromRaw(0x3ff71547652b82fe) * float64_t(static_cast<int64_t>(1 << EXPTAB_SCALE));
+static const float64_t exp_postscale = float64_t::one()/float64_t(static_cast<int64_t>(1 << EXPTAB_SCALE));
+static const float64_t exp_max_val(static_cast<int64_t>(3000*(1 << EXPTAB_SCALE))); // log10(DBL_MAX) < 3000
 
 static float32_t f32_exp( float32_t x)
 {
@@ -3883,9 +3883,9 @@ static float32_t f32_log(float32_t x)
 
     float64_t x0 = buf * tab1;
     //if last elements of icvLogTab
-    if(h0 == 255) x0 += float64_t(-float64_t::one() / float64_t(512));
+    if(h0 == 255) x0 += float64_t(-float64_t::one() / float64_t(static_cast<int64_t>(512)));
 
-    float64_t y0 = ln_2 * float64_t(expF32UI(x.v) - 127) + tab0 + x0*x0*x0/float64_t(3) - x0*x0/float64_t(2) + x0;
+    float64_t y0 = ln_2 * float64_t(static_cast<int64_t>(expF32UI(x.v) - 127)) + tab0 + x0*x0*x0/float64_t(static_cast<int64_t>(3)) - x0*x0/float64_t(static_cast<int64_t>(2)) + x0;
 
     return y0;
 }
@@ -3897,14 +3897,14 @@ static float64_t f64_log(float64_t x)
     if(x == float64_t::zero()) return -float64_t::inf();
 
     static const float64_t
-    A7(1),
-    A6(-float64_t::one() / float64_t(2)),
-    A5( float64_t::one() / float64_t(3)),
-    A4(-float64_t::one() / float64_t(4)),
-    A3( float64_t::one() / float64_t(5)),
-    A2(-float64_t::one() / float64_t(6)),
-    A1( float64_t::one() / float64_t(7)),
-    A0(-float64_t::one() / float64_t(8));
+    A7(static_cast<int64_t>(1)),
+    A6(-float64_t::one() / float64_t(static_cast<int64_t>(2))),
+    A5( float64_t::one() / float64_t(static_cast<int64_t>(3))),
+    A4(-float64_t::one() / float64_t(static_cast<int64_t>(4))),
+    A3( float64_t::one() / float64_t(static_cast<int64_t>(5))),
+    A2(-float64_t::one() / float64_t(static_cast<int64_t>(6))),
+    A1( float64_t::one() / float64_t(static_cast<int64_t>(7))),
+    A0(-float64_t::one() / float64_t(static_cast<int64_t>(8)));
 
     //first 8 bits of mantissa
     int h0 = (x.v >> (52 - LOGTAB_SCALE)) & ((1 << LOGTAB_SCALE) - 1);
@@ -3917,10 +3917,10 @@ static float64_t f64_log(float64_t x)
 
     float64_t x0 = buf * tab1;
     //if last elements of icvLogTab
-    if(h0 == 255) x0 += float64_t(-float64_t::one()/float64_t(512));
+    if(h0 == 255) x0 += float64_t(-float64_t::one()/float64_t(static_cast<int64_t>(512)));
     float64_t xq = x0*x0;
 
-    return ln_2 * float64_t( expF64UI(x.v) - 1023) + tab0 + (((A0*xq + A2)*xq + A4)*xq + A6)*xq +
+    return ln_2 * float64_t(static_cast<int64_t>( expF64UI(x.v) - 1023)) + tab0 + (((A0*xq + A2)*xq + A4)*xq + A6)*xq +
            (((A1*xq + A3)*xq + A5)*xq + A7)*x0;
 }
 
@@ -4081,8 +4081,8 @@ static float64_t f64_powi( float64_t x, int y)
 static const float64_t pi2   = float64_t::pi().setExp(2);
 static const float64_t piby2 = float64_t::pi().setExp(0);
 static const float64_t piby4 = float64_t::pi().setExp(-1);
-static const float64_t half  = float64_t::one()/float64_t(2);
-static const float64_t third = float64_t::one()/float64_t(3);
+static const float64_t half  = float64_t::one()/float64_t(static_cast<int64_t>(2));
+static const float64_t third = float64_t::one()/float64_t(static_cast<int64_t>(3));
 
 /* __kernel_sin( x, y, iy)
  * N.B. from OpenCV side: y and iy removed, simplified to polynomial
@@ -4223,7 +4223,7 @@ static void f64_sincos_reduce(const float64_t& x, float64_t& y, int& n)
         {
             n = 0; y = p;
         }
-        else if(abs(v) <= (float64_t(3)*piby4))
+        else if(abs(v) <= (float64_t(static_cast<int64_t>(3))*piby4))
         {
             n = (p > 0) ? 1 : 3;
             y = (p > 0) ? p - piby2 : p + piby2;

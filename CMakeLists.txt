@@ -488,6 +488,33 @@ OCV_OPTION(OPENCV_ENABLE_MEMALIGN     "Enable posix_memalign or memalign usage" 
 OCV_OPTION(ENABLE_PYLINT              "Add target with Pylint checks"                            (BUILD_DOCS OR BUILD_EXAMPLES) IF (NOT CMAKE_CROSSCOMPILING AND NOT APPLE_FRAMEWORK) )
 OCV_OPTION(ENABLE_FLAKE8              "Add target with Python flake8 checker"                    (BUILD_DOCS OR BUILD_EXAMPLES) IF (NOT CMAKE_CROSSCOMPILING AND NOT APPLE_FRAMEWORK) )
 
+if(WE2)
+  message(STATUS "Enabled WE2 target specific build")
+  add_definitions(-DWE2)
+endif()
+
+if(FREERTOS)
+  message(STATUS "Enabled FREERTOS target specific build")
+  add_definitions(-DFREERTOS)
+  include(FetchContent)
+  FetchContent_Declare( freertos_kernel
+    GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+    GIT_TAG         V10.5.1 # V10.5.1 in WE2_CM55M_APP_S
+  )
+  add_library(freertos_config INTERFACE)
+  target_include_directories(freertos_config SYSTEM INTERFACE include)
+  target_compile_definitions(freertos_config INTERFACE projCOVERAGE_TEST=0)
+  set(FREERTOS_CONFIG_FILE_DIRECTORY "${CMAKE_SOURCE_DIR}/include" CACHE STRING "")
+  set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+  set(FREERTOS_PORT "GCC_ARM_CM55_NONSECURE" CACHE STRING "" FORCE)
+  FetchContent_MakeAvailable(freertos_kernel)
+  target_compile_definitions(freertos_config INTERFACE ${definitions})
+  target_compile_options(freertos_config INTERFACE ${options})
+  include_directories("${CMAKE_SOURCE_DIR}/build/_deps/freertos_kernel-src/include")
+  include_directories("${CMAKE_SOURCE_DIR}/build/_deps/freertos_kernel-src/portable/GCC/ARM_CM55/non_secure")
+  include_directories("${CMAKE_SOURCE_DIR}/include")
+endif()
+
 if(ENABLE_IMPL_COLLECTION)
   add_definitions(-DCV_COLLECT_IMPL_DATA)
 endif()
@@ -651,7 +678,7 @@ include(cmake/OpenCVModule.cmake)
 #  Detect endianness of build platform
 # ----------------------------------------------------------------------------
 
-if(IOS)
+if(IOS OR WE2)
   # test_big_endian needs try_compile, which doesn't work for iOS
   # http://public.kitware.com/Bug/view.php?id=12288
   set(WORDS_BIGENDIAN 0)

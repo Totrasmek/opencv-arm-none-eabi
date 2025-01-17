@@ -16,9 +16,14 @@
 
 
 #ifdef CV_CXX11
+#if defined(FREERTOS)
+#include "custom_mutex.hpp"
+#include <chrono>
+#else
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
+#endif
 #endif
 
 namespace cv {
