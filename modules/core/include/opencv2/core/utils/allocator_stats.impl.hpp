@@ -6,7 +6,7 @@
 #define OPENCV_CORE_ALLOCATOR_STATS_IMPL_HPP
 
 #include "./allocator_stats.hpp"
-
+#undef CV_CXX11
 #ifdef CV_CXX11
 #include <atomic>
 #endif
@@ -113,5 +113,5 @@ public:
 #endif
 
 }} // namespace
-
+#define CV_CXX11
 #endif // OPENCV_CORE_ALLOCATOR_STATS_IMPL_HPP
