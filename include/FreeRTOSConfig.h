@@ -111,6 +111,9 @@ extern uint32_t SystemCoreClock;
 #define configMINIMAL_SECURE_STACK_SIZE       ((uint32_t)1024)
 #define configRUN_FREERTOS_SECURE_ONLY        1
 
+/* TLS config */
+#define configNUM_THREAD_LOCAL_STORAGE_POINTERS 1
+
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
   /* __NVIC_PRIO_BITS will be specified when CMSIS is being used. */
