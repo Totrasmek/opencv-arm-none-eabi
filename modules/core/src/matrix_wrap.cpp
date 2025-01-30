@@ -1459,7 +1459,8 @@ void _OutputArray::create(int d, const int* sizes, int mtype, int i,
             ((std::vector<Vec<int, 128> >*)v)->resize(len);
             break;
         default:
-            CV_Error_(CV_StsBadArg, ("Vectors with element size %d are not supported. Please, modify OutputArray::create()\n", esz));
+            std::string error_msg = std::string("Vectors with element size ") + std::to_string(esz) + std::string(" are not supported. Please, modify OutputArray::create()\n");
+            CV_Error(CV_StsBadArg, error_msg);
         }
         return;
     }
