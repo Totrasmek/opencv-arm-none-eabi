@@ -51,7 +51,7 @@ cmake 									\
 -DBUILD_PNG=OFF							\
 -DWITH_VTK=OFF							\
 -DWITH_FFMPEG=OFF						\
--DBUILD_LIST=core						\
+-DBUILD_LIST=core,imgproc,imgcodecs     \
 -DCMAKE_TOOLCHAIN_FILE=../platforms/arm-none-eabi.toolchain.cmake \
 ..
 cp ../alloc_fix.cpp ./3rdparty/ade/ade-0.1.1f/sources/ade/source/alloc.cpp
