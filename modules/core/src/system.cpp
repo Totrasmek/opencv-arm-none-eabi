@@ -211,7 +211,7 @@ std::wstring GetTempFileNameWinRT(std::wstring prefix)
 
 #endif
 #else
-#include <pthread.h>
+#include "custom_pthread_keys.hpp"
 #include <sys/time.h>
 #include <time.h>
 
