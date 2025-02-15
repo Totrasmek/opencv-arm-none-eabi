@@ -104,7 +104,7 @@ extern uint32_t SystemCoreClock;
 #define configUSE_MALLOC_FAILED_HOOK          0
 
 /* Port specific configuration. */
-#define configENABLE_MPU                      1
+#define configENABLE_MPU                      0
 #define configENABLE_FPU                      1
 #define configENABLE_MVE                      0
 #define configENABLE_TRUSTZONE                0
