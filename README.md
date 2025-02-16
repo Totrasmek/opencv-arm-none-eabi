@@ -21,7 +21,6 @@ modules/imgproc/src/fixedpoint.inl.hpp
 modules/imgproc/src/resize.cpp
 modules/imgproc/src/smooth.dispatch.cpp
 modules/imgproc/src/smooth.simd.hpp
-modules/core/src/parallel.cpp
 ```
 
 And significant changes were made to:
