@@ -16,13 +16,12 @@ When built with `#define FREERTOS`, uses FreeRTOS headers from [FreeRTOS-Kernel 
 
 Other manual changes for compilation where the removal of the following files (stubbing should be implemented in future so I don't have to remove these):
 ```
-modules/core/src/parallel.cpp
-modules/core/src/parallel_impl.cpp
 modules/imgproc/src/color_lab.cpp
 modules/imgproc/src/fixedpoint.inl.hpp
 modules/imgproc/src/resize.cpp
 modules/imgproc/src/smooth.dispatch.cpp
 modules/imgproc/src/smooth.simd.hpp
+modules/core/src/parallel.cpp
 ```
 
 And significant changes were made to:
